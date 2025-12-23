@@ -45,8 +45,6 @@ ScanLedger is a modern web application built with Next.js, FastAPI, PostgreSQL, 
 - `make logs`: View real-time logs from all containers.
 - `make ps`: List running containers.
 
-For a deep dive into the Docker architecture, see [DOCKER_SETUP.md](./DOCKER_SETUP.md).
-
 ## Project Structure
 
 ```text
