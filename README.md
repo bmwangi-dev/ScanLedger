@@ -1,121 +1,71 @@
-# ScanLedger
+# ScanLedger MVP
 
-**ScanLedger** is a blockchain-based receipt scanning and expense tracking system designed to automate financial record-keeping, improve transparency, and reduce administrative overhead for organizations such as NGOs, small businesses, and logistics-heavy teams.
-
----
-
-## Table of Contents
-- [Problem](#problem)  
-- [Solution](#solution)  
-- [Key Features](#key-features)  
-- [Architecture](#architecture)  
-- [Blockchain Integration](#blockchain-integration)  
-- [Tech Stack](#tech-stack)  
-- [Getting Started](#getting-started)  
-- [Future Work](#future-work)  
-
----
-
-## Problem
-
-Organizations often rely on manual processes to record and manage financial expenses:
-
-- Receipt data is entered manually, which is time-consuming and error-prone  
-- Lost or damaged receipts make audits difficult  
-- Poor visibility into spending patterns slows decision-making  
-- Compliance and accountability risks arise, especially for NGOs and donor-funded organizations  
-
-These challenges create unnecessary administrative headaches and reduce operational efficiency.
-
----
-
-## Solution
-
-ScanLedger automates receipt management and expense tracking:
-
-- **Receipt scanning:** Capture receipts using a phone camera or file upload  
-- **Automated data extraction:** Extract key details like date, vendor, total, and line items via OCR  
-- **Immutable record-keeping:** Anchor confirmed receipts on the Cardano blockchain for audit-proof traceability  
-- **Admin dashboards:** Visualize expenditures, timelines, and trends  
-- **Privacy-conscious:** Sensitive data is encrypted before being stored on-chain  
-
-This eliminates tedious manual entry, reduces errors, and provides a trustworthy, tamper-resistant financial record.
-
----
-
-## Key Features
-
-- Receipt capture via camera or upload  
-- OCR-based data extraction (vendor, amount, date, items)  
-- Admin confirmation workflow for accuracy  
-- Immutable blockchain proof of each confirmed receipt  
-- Expense dashboards with summaries and timelines  
-- Future-proof record management for audits and reporting  
-
----
-
-## Architecture
-
-**High-Level Flow:**
-
-1. **Receipt Capture:** Users upload or capture receipts via frontend (Next.js).  
-2. **OCR & Parsing:** Backend (FastAPI) extracts structured data from images.  
-3. **Admin Confirmation:** Users validate extracted data before submission.  
-4. **Hash Generation:** Receipt image + confirmed data is hashed (SHA-256).  
-5. **Blockchain Anchoring:** Hash and metadata (encrypted) are stored as Cardano transaction metadata.  
-6. **Dashboard & Audit:** Users view and verify receipts; auditors can verify integrity using blockchain transaction IDs.  
-
-**Data Lifecycle:**
-
-- **Raw Upload → OCR Extraction → Admin Confirmation → Hashing → Blockchain Anchoring → Dashboard / Verification**
-
----
-
-## Blockchain Integration
-
-ScanLedger leverages **Cardano** to provide immutable proof of receipts:
-
-- Only **cryptographic hashes** and encrypted metadata are stored on-chain  
-- Blockchain acts as a permanent, tamper-proof audit trail  
-- Receipt IDs map directly to blockchain transaction IDs  
-- Admins and auditors can verify receipt integrity independently using blockchain data  
-- Sensitive data (vendor, amount, admin info) is encrypted to ensure privacy  
-
-This ensures accountability and transparency without storing sensitive information publicly.
-
----
+ScanLedger is a modern web application built with Next.js, FastAPI, PostgreSQL, and Redis.
 
 ## Tech Stack
 
-- **Frontend:** Next.js, React, TypeScript, Tailwind CSS  
-- **Backend:** FastAPI (Python), REST API, async processing  
-- **Database:** PostgreSQL  
-- **Cache:** Redis  
-- **OCR:** Tesseract OCR (Python)  
-- **Storage:** Local filesystem or MinIO/S3  
-- **Blockchain:** Cardano (metadata anchoring), Blockfrost API  
-- **Containerization:** Docker & Docker Compose  
-
----
+- **Frontend:** Next.js (TypeScript) + Axios
+- **Backend:** Python FastAPI + Uvicorn + Pydantic
+- **Database:** PostgreSQL 15
+- **Cache:** Redis 7
+- **Orchestration:** Docker Compose
 
 ## Getting Started
 
 ### Prerequisites
 
-- Docker & Docker Compose  
-- Node.js & npm  
-- Python 3.11+  
-- Git & SSH access to repo  
+- Docker and Docker Compose installed on your machine.
+- Make (optional, for using the Makefile shortcuts).
 
-### Run Locally
+### Installation & Setup
 
-```bash
-# Clone repo
-git clone git@github.com-bmwangi:bmwangi-dev/ScanLedger.git
-cd ScanLedger
+1. **Build the containers:**
+   ```bash
+   make build
+   ```
 
-# Build and start containers
-docker-compose up --build
+2. **Start the services:**
+   ```bash
+   make up
+   ```
 
-# Backend API available at http://localhost:8000
-# Frontend available at http://localhost:3000
+3. **Access the application:**
+   - Frontend: [http://localhost:3000](http://localhost:3000)
+   - Backend API: [http://localhost:8000](http://localhost:8000)
+   - API Docs (Swagger): [http://localhost:8000/docs](http://localhost:8000/docs)
+
+### Useful Commands
+
+- `make up`: Start all services in detached mode.
+- `make down`: Stop and remove all containers.
+- `make build`: Build or rebuild services.
+- `make watch`: Start services and follow logs in real-time.
+- `make migrate`: Run database migrations.
+- `make clean`: Deep reset of the Docker environment.
+- `make logs`: View real-time logs from all containers.
+- `make ps`: List running containers.
+
+For a deep dive into the Docker architecture, see [DOCKER_SETUP.md](./DOCKER_SETUP.md).
+
+## Project Structure
+
+```text
+.
+├── app/
+│   ├── backend/            # FastAPI source code
+│   │   ├── Dockerfile
+│   │   ├── main.py
+│   │   └── requirements.txt
+│   └── frontend/           # Next.js source code
+│       ├── Dockerfile
+│       ├── pages/
+│       ├── package.json
+│       └── tsconfig.json
+├── docker-compose.yml  # Docker orchestration
+├── Makefile            # Shortcut commands
+└── README.md           # Project documentation
+```
+
+## Environment Variables
+
+Default environment variables are configured in `docker-compose.yml`. For production, ensure you use a `.env` file and update the security settings.

@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./app/frontend
+      target: development
+    image: scanledger-frontend:latest
+    container_name: scanledger-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app/frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NODE_ENV=development
+
+  backend:
+    build: ./app/backend
+    image: scanledger-backend:latest
+    container_name: scanledger-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app/backend:/app
+    environment:
+      - DATABASE_URL=postgresql://scanledgeruser:scanledger4932@db:5432/scanledgerdb
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15-alpine
+    container_name: scanledger-db
+    environment:
+      POSTGRES_USER: scanledgeruser
+      POSTGRES_PASSWORD: scanledger4932
+      POSTGRES_DB: scanledgerdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: scanledger-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
