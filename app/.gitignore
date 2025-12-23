@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+/frontend/node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+/frontend/.next/
+/frontend/out/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv
+env/
+venv/
+ENV/
+/backend/__pycache__/
+/backend/.venv/
+
+# Production build
+/frontend/build/
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Docker
+.docker/
+*.tar
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database
+postgres_data/
