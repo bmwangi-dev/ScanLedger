@@ -1,4 +1,4 @@
-.PHONY: up down build logs restart ps watch clean
+.PHONY: up down build logs restart ps watch clean frontend-install backend-install
 
 up:
 	@docker-compose up -d --remove-orphans 2>&1 | sed 's/done/\x1b[32mstarted\x1b[0m/g' | grep -E "started|Network|Volume"
@@ -29,3 +29,9 @@ watch:
 
 migrate:
 	docker-compose exec backend alembic upgrade head
+
+frontend-install:
+	docker-compose exec frontend npm install
+
+backend-install:
+	docker-compose exec backend pip install -r requirements.txt

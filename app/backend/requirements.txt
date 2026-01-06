@@ -4,5 +4,7 @@ psycopg2-binary
 redis
 python-dotenv
 pydantic
+pydantic-settings
 sqlalchemy
 alembic
+fastapi-mail

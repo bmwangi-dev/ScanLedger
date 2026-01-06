@@ -9,15 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "axios": "latest",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.24.0",
+    "lucide-react": "^0.562.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "axios": "latest"
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "typescript": "latest",
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "latest",
     "@types/react": "latest",
-    "@types/react-dom": "latest"
+    "@types/react-dom": "latest",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "latest"
   }
 }

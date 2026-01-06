@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import get_db, engine, Base
@@ -6,8 +6,13 @@ import os
 import redis
 import psycopg2
 
-# Create tables on startup (as a backup to migrations)
-# Base.metadata.create_all(bind=engine)
+# Import models and schemas
+import models
+import schemas
+from email_service import send_waitlist_confirmation
+
+# Create tables on startup
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -24,19 +29,36 @@ app.add_middleware(
 def read_root():
     return {"Hello": "World", "Service": "ScanLedger Backend"}
 
-from sqlalchemy import text
-
-@app.get("/users")
-def get_users(db: Session = Depends(get_db)):
-    # Using raw SQL for a quick test since we haven't defined SQLAlchemy models yet
-    result = db.execute(text("SELECT * FROM users")).fetchall()
-    return [{"id": row[0], "email": row[1], "full_name": row[2], "is_active": row[3]} for row in result]
-
-@app.post("/seed")
-def seed_user(db: Session = Depends(get_db)):
-    db.execute(text("INSERT INTO users (email, full_name, is_active) VALUES ('test@example.com', 'Test User', true)"))
+@app.post("/waitlist", response_model=schemas.WaitlistSignupResponse)
+async def join_waitlist(
+    signup: schemas.WaitlistSignupCreate, 
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
+    # Check if email already exists
+    db_user = db.query(models.WaitlistSignup).filter(models.WaitlistSignup.email == signup.email).first()
+    if db_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    # Create new signup record
+    new_signup = models.WaitlistSignup(
+        name=signup.name,
+        email=signup.email,
+        company=signup.company
+    )
+    
+    db.add(new_signup)
     db.commit()
-    return {"message": "User seeded successfully"}
+    db.refresh(new_signup)
+    
+    # Send confirmation email in background
+    background_tasks.add_task(send_waitlist_confirmation, signup.email, signup.name)
+    
+    # Update email_sent status (optimistic, or update in a separate task callback)
+    new_signup.email_sent = True
+    db.commit()
+    
+    return new_signup
 
 @app.get("/health")
 def health_check():
