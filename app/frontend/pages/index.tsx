@@ -108,7 +108,7 @@ export default function Home() {
                 </div>
 
                 {/* Hero Content */}
-                <div className="relative container mx-auto px-4 flex-1 flex flex-col justify-center text-center">
+                <div className="relative container mx-auto px-4 pt-24 md:pt-32 flex-1 flex flex-col justify-center text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 mx-auto">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-teal-light">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -502,7 +502,7 @@ export default function Home() {
                 onClick={closeModal}
             />
 
-            <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-card border border-border rounded-2xl shadow-medium z-[101] transition-all duration-300 ${isModalOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+            <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-md bg-card border border-border rounded-2xl shadow-medium z-[101] transition-all duration-300 ${isModalOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
                 }`}>
                 <div className="p-6 bg-navy text-white rounded-t-2xl border-b border-white/10 relative">
                     <button
