@@ -1,5 +1,7 @@
 # ScanLedger Docker Architecture & Setup Guide
 
+> **macOS Users**: See [MACOS_DOCKER_GUIDE.md](./MACOS_DOCKER_GUIDE.md) for macOS-specific optimizations, troubleshooting, and performance tips.
+
 This document provides a detailed breakdown of the Docker configuration for the ScanLedger MVP. The environment is designed for high-performance development with hot-reloading and production parity.
 
 ## 🏗️ Architecture Overview
@@ -76,14 +78,53 @@ The services communicate over a default Docker bridge network.
 
 ### Useful Commands (Makefile)
 
+Run `make help` to see all available commands. Here are the most common ones:
+
+#### Setup Commands
 | Command | Description |
 | :--- | :--- |
-| `make up` | Start all services in the background. |
-| `make build` | Rebuild frontend and backend images. |
-| `make watch` | Start services and follow logs in real-time. |
-| `make migrate` | Run Alembic migrations inside the backend container. |
-| `make restart` | Full stop and start of all services. |
-| `make clean` | **Deep Reset**: Removes containers, volumes, and networks. |
+| `make help` | Display all available commands with descriptions |
+| `make init` | **First-time setup** - Build images, start services, install dependencies |
+| `make build` | Rebuild frontend and backend images |
+
+#### Development Commands
+| Command | Description |
+| :--- | :--- |
+| `make up` | Start all services in the background |
+| `make down` | Stop all services |
+| `make restart` | Full stop and start of all services |
+| `make dev` | Full development setup (build + watch) |
+| `make watch` | Start services and follow logs in real-time |
+| `make logs` | Follow logs from all services |
+| `make ps` | Show running containers and their status |
+
+#### Database Commands
+| Command | Description |
+| :--- | :--- |
+| `make migrate` | Run Alembic migrations inside the backend container |
+
+#### Dependency Management
+| Command | Description |
+| :--- | :--- |
+| `make frontend-install` | Install/update frontend (npm) dependencies |
+| `make backend-install` | Install/update backend (pip) dependencies |
+
+#### Shell Access
+| Command | Description |
+| :--- | :--- |
+| `make shell-frontend` | Open an interactive shell in the frontend container |
+| `make shell-backend` | Open an interactive shell in the backend container |
+
+#### Monitoring & Health
+| Command | Description |
+| :--- | :--- |
+| `make health` | Check health status of all services (DB, Redis, Frontend, Backend) |
+
+#### Cleanup Commands
+| Command | Description |
+| :--- | :--- |
+| `make clean` | Remove containers, volumes, and networks |
+| `make prune` | **Deep clean** - Remove all unused Docker resources (use with caution) |
 
 ---
 
